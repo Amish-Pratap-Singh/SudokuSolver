@@ -50,11 +50,11 @@ std::string SystemInfo::availableRamFormatted() const {
 std::string SystemInfo::cpuClockFormatted() const {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(0);
-    
+
     // Negative value indicates reference/estimated value
     bool isReference = (max_clock_mhz < 0);
     double displayMax = isReference ? -max_clock_mhz : max_clock_mhz;
-    
+
     if (base_clock_mhz > 0) {
         oss << base_clock_mhz << " MHz";
         if (displayMax > base_clock_mhz) {
@@ -434,6 +434,7 @@ static std::string getAndroidProp(const char* name) {
 // ============================================================================
 // ARM CPU Part ID Lookup
 // ============================================================================
+#ifndef __APPLE__
 static std::string getArmCpuName(uint32_t implementer, uint32_t part) {
     // ARM Ltd (0x41)
     if (implementer == 0x41) {
@@ -511,6 +512,7 @@ static std::string getArmCpuName(uint32_t implementer, uint32_t part) {
 
     return "";
 }
+#endif
 
 // ============================================================================
 // macOS sysctl helper
@@ -786,33 +788,33 @@ double SystemInfoDetector::detectMaxClock() {
     if (freq > 0) {
         return static_cast<double>(freq) / 1000000.0;
     }
-    
+
     // Apple Silicon doesn't report frequency via sysctl
     // Use reference values (return negative to indicate reference)
     std::string brand = getSysctlString("machdep.cpu.brand_string");
-    
+
     // M4 series
     if (brand.find("M4 Max") != std::string::npos) return -4400.0;
     if (brand.find("M4 Pro") != std::string::npos) return -4400.0;
     if (brand.find("M4") != std::string::npos) return -4400.0;
-    
-    // M3 series  
+
+    // M3 series
     if (brand.find("M3 Max") != std::string::npos) return -4050.0;
     if (brand.find("M3 Pro") != std::string::npos) return -4050.0;
     if (brand.find("M3") != std::string::npos) return -4050.0;
-    
+
     // M2 series
     if (brand.find("M2 Ultra") != std::string::npos) return -3500.0;
     if (brand.find("M2 Max") != std::string::npos) return -3500.0;
     if (brand.find("M2 Pro") != std::string::npos) return -3500.0;
     if (brand.find("M2") != std::string::npos) return -3500.0;
-    
+
     // M1 series
     if (brand.find("M1 Ultra") != std::string::npos) return -3200.0;
     if (brand.find("M1 Max") != std::string::npos) return -3200.0;
     if (brand.find("M1 Pro") != std::string::npos) return -3200.0;
     if (brand.find("M1") != std::string::npos) return -3200.0;
-    
+
     // Unknown Apple Silicon
     return 0.0;
 #else
