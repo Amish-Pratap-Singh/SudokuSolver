@@ -98,7 +98,17 @@ Board JSONHandler::loadFromJSON(const nlohmann::json& json) {
     // Detect or read dimensions
     BoardDimension dim = detectDimension(json, detectedSize);
 
-    return Board(grid, dim);
+    Board board(grid, dim);
+
+    // Read optional metadata
+    if (json.contains("name") && json["name"].is_string()) {
+        board.setName(json["name"].get<std::string>());
+    }
+    if (json.contains("difficulty") && json["difficulty"].is_string()) {
+        board.setDifficultyLabel(json["difficulty"].get<std::string>());
+    }
+
+    return board;
 }
 
 Grid JSONHandler::parseGrid2D(const nlohmann::json& arr, int& detectedSize) {

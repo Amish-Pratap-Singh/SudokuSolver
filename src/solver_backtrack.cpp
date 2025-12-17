@@ -192,7 +192,7 @@ namespace sudoku {
 		if (row == -1) {
 			if (board.isValid()) {
 				solutions.push_back(board);
-				return solutions.size() >= static_cast<size_t>(maxSolutions);
+				return maxSolutions > 0 && solutions.size() >= static_cast<size_t>(maxSolutions);
 			}
 			return false;
 		}

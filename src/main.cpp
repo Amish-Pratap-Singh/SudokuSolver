@@ -2,8 +2,12 @@
 #include <iomanip>
 #include <string>
 #include <filesystem>
+#include <chrono>
+#include <fstream>
+#include <algorithm>
 
 #include <CLI/CLI.hpp>
+#include <nlohmann/json.hpp>
 
 #include "board.hpp"
 #include "solver.hpp"
@@ -62,25 +66,25 @@ namespace BuiltinPuzzles {
         };
     }
 
-    // 16x16 - Hard 16x16 puzzle
+    // 16x16 - Hard puzzle (30% clues, unique solution)
     inline Grid get16x16() {
         return {
-            { 0,  0,  0,  0,  0,  0,  0, 15,  0, 10,  0,  0,  0, 12,  1,  0},
-            { 0,  1, 10,  0,  0,  0,  0,  3,  0,  0, 16,  0,  0,  0,  0,  0},
-            { 3,  0,  0,  8, 12,  1,  0, 14,  0,  0,  0,  0,  0,  0,  0,  6},
-            { 0,  2,  0,  0,  0,  0,  0,  0, 14,  0,  0, 15,  0,  0,  0,  0},
-            { 0,  0,  0,  3, 15,  0,  0,  0,  8,  1,  0,  0,  5,  7,  0,  0},
-            { 4,  0,  0, 10,  1,  0,  0,  0, 11,  0,  0,  7, 15,  0,  0,  0},
-            { 0,  0,  8,  1,  7, 16,  0,  0,  0, 14,  0,  6, 12,  0,  0,  0},
-            { 0,  0,  0,  0, 14,  0, 13, 12,  0,  0,  0,  0,  0,  1,  0,  0},
-            { 0,  0, 11,  0,  0,  0,  0,  0,  6,  7,  0, 14,  0,  0,  0,  0},
-            { 0,  0,  0,  2,  3,  0, 11,  0,  0,  0, 10,  1, 14,  9,  0,  0},
-            { 0,  0,  0, 14,  6,  0,  0, 10,  0,  0,  0,  4, 11,  0,  0,  5},
-            { 0,  0,  3, 13,  0,  0,  4, 16,  0,  0,  0,  9,  6,  0,  0,  0},
-            { 0,  0,  0,  0, 11,  0,  0,  6,  0,  0,  0,  0,  0,  0,  2,  0},
-            {10,  0,  0,  0,  0,  0,  0,  0, 15,  0,  1,  6, 16,  0,  0,  7},
-            { 0,  0,  0,  0,  0, 15,  0,  0,  2,  0,  0,  0,  0,  4, 12,  0},
-            { 0, 16, 15,  0,  0,  0,  3,  0,  7,  0,  0,  0,  0,  0,  0,  0}
+            { 0,  0,  0,  4,  5,  6,  7,  0,  0, 10,  0,  0,  0,  0, 15,  0},
+            { 0,  0,  0,  0,  0, 10,  0,  0,  0, 14,  0, 16,  0,  2,  0,  0},
+            { 0, 10,  0,  0,  0,  0,  0,  0,  0,  2,  0,  0,  5,  6,  7,  0},
+            { 0, 14, 15,  0,  1,  0,  0,  4,  5,  0,  0,  0,  0,  0,  0,  0},
+            { 0,  0,  0,  0,  6,  0,  0,  0, 10,  0,  0,  0,  0,  0, 16,  0},
+            { 6,  0,  8,  0,  0,  0,  0,  0,  0,  0,  0, 15,  2,  0,  4,  0},
+            { 0,  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  6,  5,  8,  0},
+            { 0, 13, 16,  0,  2,  0,  0,  0,  0,  5,  0,  7,  0,  0,  0, 11},
+            { 0,  0,  0,  2,  0,  8,  0,  6, 11,  0,  0,  0,  0,  0,  0,  0},
+            { 7,  0,  5,  0, 11, 12,  9, 10,  0,  0,  0,  0,  0,  0,  1,  0},
+            {11,  0,  0,  0, 15,  0,  0,  0,  3,  4,  0,  0,  7,  0,  0,  0},
+            { 0,  0,  0,  0,  0,  4,  0,  2,  0,  8,  0,  6, 11,  0,  0,  0},
+            { 0,  0,  2,  0,  0,  7,  0,  5, 12, 11,  0,  0,  0,  0, 14,  0},
+            { 8,  0,  0,  0, 12,  0,  0,  0, 16,  0, 14,  0,  0,  0,  0,  0},
+            { 0,  0,  0,  0, 16,  0, 14,  0,  4,  0,  0,  0,  0,  7,  0,  0},
+            { 0,  0,  0,  0,  0,  3,  0,  0,  0,  0,  6,  0, 12,  0,  0,  0}
         };
     }
 
@@ -167,7 +171,7 @@ namespace BuiltinPuzzles {
     inline std::string getDescription(int size) {
         switch (size) {
         case 9:  return "9x9 Classic (3x3 boxes)";
-        case 16: return "16x16 Extended (4x4 boxes)";
+        case 16: return "16x16 Extended (4x4 boxes) - 77 clues, hard";
         case 25: return "25x25 Mega (5x5 boxes) - Heavy benchmark";
         default: return "Unknown";
         }
@@ -184,7 +188,7 @@ void printHeader() {
  |____/ \__,_|\__,_|\___/|_|\_\\__,_| |____/ \___/|_| \_/ \___|_|
 
 )" << Color::Reset;
-    std::cout << "  High-Performance Sudoku Solver v1.0.0 (AllenK, Kwyshell)\n";
+    std::cout << "  High-Performance Sudoku Solver " << APP_VERSION << " (AllenK, Kwyshell)\n";
     std::cout << "  Using Dancing Links (DLX) & Constraint Propagation\n";
 
 #ifdef USE_OPENMP
@@ -406,6 +410,13 @@ int main(int argc, char* argv[]) {
     bool checkUnique = false;
     app.add_flag("-u,--unique", checkUnique, "Check if solution is unique");
 
+    // Solve all solutions
+    bool solveAll = false;
+    int maxSolutions = 100;  // Default limit for safety
+    app.add_flag("--solve-all", solveAll, "Find all solutions (default limit: 25, use --max-solutions 0 for unlimited)");
+    app.add_option("--max-solutions", maxSolutions, "Maximum number of solutions to find (0 = unlimited, WARNING: may never finish!)")
+        ->default_val(100);
+
     // System info option
     bool showSysInfo = true;
     app.add_flag("--no-sysinfo", [&](auto) { showSysInfo = false; }, "Disable system information");
@@ -460,6 +471,15 @@ int main(int argc, char* argv[]) {
         // Print input board
         if (!quiet) {
             printBoard(board, "Input Puzzle:");
+            
+            // Print optional metadata
+            if (!board.name().empty()) {
+                std::cout << "Name: " << Color::Cyan << board.name() << Color::Reset << "\n";
+            }
+            if (!board.difficultyLabel().empty()) {
+                std::cout << "Difficulty: " << Color::Yellow << board.difficultyLabel() << Color::Reset << "\n";
+            }
+            
             std::cout << "Size: " << board.size() << "x" << board.size() << "\n";
             std::cout << "Empty cells: " << board.countEmpty() << "\n";
             std::cout << "Fill ratio: " << std::fixed << std::setprecision(1)
@@ -575,6 +595,19 @@ int main(int argc, char* argv[]) {
                     SolverAlgorithm::Backtracking : SolverAlgorithm::DancingLinks;
                 auto result = bench.runMultithreaded(board, algo);
                 bench.printMultithreadResult(result);
+
+                // Additional throughput summary
+                if (!quiet) {
+                    std::cout << "\n" << Color::Cyan << Color::Bold;
+                    std::cout << "=== Performance Summary ===" << Color::Reset << "\n";
+                    double total_time_sec = result.wall_time_ms / 1000.0;
+                    int total_runs = workers * benchmarkRuns;
+                    double throughput = total_runs / total_time_sec;
+                    std::cout << std::fixed << std::setprecision(2);
+                    std::cout << "  Throughput: " << Color::Green << throughput << " puzzles/sec" << Color::Reset << "\n";
+                    std::cout << "  Total Time: " << result.wall_time_ms << " ms\n";
+                    std::cout << "  Avg per puzzle: " << (result.wall_time_ms / total_runs) << " ms\n";
+                }
             } else {
                 // Single-threaded benchmark
                 if (!quiet) {
@@ -584,6 +617,23 @@ int main(int argc, char* argv[]) {
 
                 auto result = bench.run(board, *solver);
                 bench.printResult(result);
+
+                // Additional throughput summary
+                if (!quiet && result.avg_time_ms > 0) {
+                    std::cout << "\n" << Color::Cyan << Color::Bold;
+                    std::cout << "=== Performance Summary ===" << Color::Reset << "\n";
+                    double throughput = 1000.0 / result.avg_time_ms;
+                    std::cout << std::fixed << std::setprecision(2);
+                    std::cout << "  Throughput: " << Color::Green << throughput << " puzzles/sec" << Color::Reset << "\n";
+                    std::cout << "  Avg per puzzle: " << result.avg_time_ms << " ms\n";
+
+                    // Hint for multi-threaded benchmark
+                    int hw_threads = Benchmark::getHardwareConcurrency();
+                    if (hw_threads > 1) {
+                        std::cout << Color::Yellow << "\n  Tip: Use -w 0 for multi-threaded benchmark ("
+                                  << hw_threads << " threads available)" << Color::Reset << "\n";
+                    }
+                }
             }
 
             return 0;
@@ -592,6 +642,78 @@ int main(int argc, char* argv[]) {
         // Solve
         if (!quiet) {
             std::cout << "Solving with " << solver->name() << "...\n";
+        }
+
+        // Solve all solutions mode
+        if (solveAll) {
+            // Warning for large puzzles with unlimited search
+            if (maxSolutions == 0 && board.size() > 9) {
+                std::cout << Color::Yellow << Color::Bold;
+                std::cout << "\n⚠️  WARNING: Searching ALL solutions on a " << board.size() << "x" << board.size()
+                          << " puzzle with no limit!\n";
+                std::cout << "   This may take EXTREMELY long (potentially years).\n";
+                std::cout << "   Consider using --max-solutions to set a limit.\n";
+                std::cout << "   Press Ctrl+C to abort.\n";
+                std::cout << Color::Reset << "\n";
+            }
+
+            if (!quiet) {
+                std::cout << Color::Blue << "Finding all solutions";
+                if (maxSolutions > 0) {
+                    std::cout << " (max: " << maxSolutions << ")";
+                } else {
+                    std::cout << " (UNLIMITED)";
+                }
+                std::cout << "..." << Color::Reset << "\n";
+            }
+
+            auto start = std::chrono::high_resolution_clock::now();
+            auto solutions = solver->findAllSolutions(board, maxSolutions);
+            auto end = std::chrono::high_resolution_clock::now();
+            double elapsed_ms = std::chrono::duration<double, std::milli>(end - start).count();
+
+            std::cout << "\n" << Color::Bold << "=== All Solutions Result ===" << Color::Reset << "\n";
+            std::cout << "Solutions found: " << Color::Green << solutions.size() << Color::Reset;
+            if (maxSolutions > 0 && static_cast<int>(solutions.size()) >= maxSolutions) {
+                std::cout << Color::Yellow << " (limit reached)" << Color::Reset;
+            }
+            std::cout << "\n";
+            std::cout << std::fixed << std::setprecision(2);
+            std::cout << "Time: " << elapsed_ms << " ms\n";
+
+            if (!solutions.empty()) {
+                // Show first few solutions
+                int showCount = std::min(static_cast<int>(solutions.size()), 3);
+                for (int i = 0; i < showCount; i++) {
+                    std::cout << "\n";
+                    printBoard(solutions[i], "Solution #" + std::to_string(i + 1) + ":");
+                }
+
+                if (solutions.size() > 3) {
+                    std::cout << "\n" << Color::Yellow
+                              << "... and " << (solutions.size() - 3) << " more solutions"
+                              << Color::Reset << "\n";
+                }
+
+                // Save all solutions if output file specified
+                if (!outputFile.empty()) {
+                    nlohmann::json output;
+                    output["puzzle"] = board.grid();
+                    output["solution_count"] = solutions.size();
+                    nlohmann::json solArray = nlohmann::json::array();
+                    for (const auto& sol : solutions) {
+                        solArray.push_back(sol.grid());
+                    }
+                    output["solutions"] = solArray;
+                    output["time_ms"] = elapsed_ms;
+
+                    std::ofstream ofs(outputFile);
+                    ofs << output.dump(2);
+                    std::cout << "\nAll solutions saved to: " << outputFile << "\n";
+                }
+            }
+
+            return solutions.empty() ? 1 : 0;
         }
 
         auto result = solver->solve(board);

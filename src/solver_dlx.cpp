@@ -258,7 +258,7 @@ bool DLXSolver::searchAll(int depth, std::vector<std::vector<int>>& solutions, i
 
     if (header_->right == header_) {
         solutions.push_back(solution_rows_);
-        return solutions.size() >= static_cast<size_t>(maxSolutions);
+        return maxSolutions > 0 && solutions.size() >= static_cast<size_t>(maxSolutions);
     }
 
     Node* col = selectColumn();

@@ -31,6 +31,12 @@ public:
     int boxCols() const { return dim_.box_cols; }
     const BoardDimension& dimension() const { return dim_; }
 
+    // Metadata accessors
+    const std::string& name() const { return name_; }
+    void setName(const std::string& name) { name_ = name; }
+    const std::string& difficultyLabel() const { return difficulty_label_; }
+    void setDifficultyLabel(const std::string& diff) { difficulty_label_ = diff; }
+
     Cell get(int row, int col) const;
     void set(int row, int col, Cell value);
     bool isEmpty(int row, int col) const;
@@ -75,6 +81,8 @@ public:
 private:
     Grid grid_;
     BoardDimension dim_;
+    std::string name_;              // Puzzle name (optional)
+    std::string difficulty_label_;  // Difficulty label (optional)
 
     void initGrid(int size);
     bool isInRange(int row, int col) const;
