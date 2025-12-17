@@ -148,11 +148,32 @@ Where:
 BT = Backtracking, DLX = Dancing Links
 ```
 
+### Per-Core Throughput Analysis
+
+```
+Per-Core Efficiency Comparison (DLX, 25x25 Puzzle)
+══════════════════════════════════════════════════════════════════════════════
+
+Platform              │ Cores │ Total/s  │ Per-Core/s │ Notes
+──────────────────────┼───────┼──────────┼────────────┼───────────────────────
+Ryzen 9950X3D (WSL2)  │  32T  │  903.59  │   28.2     │ High core count
+Ryzen 9950X3D (Win)   │  32T  │  885.59  │   27.7     │ MSVC overhead
+Apple M1 (VM)         │   3T  │   94.92  │   31.6     │ Highest IPC!
+EPYC 7763 (Linux)     │   4T  │   67.49  │   16.9     │ CI resource limit
+EPYC 7763 (Windows)   │   4T  │   58.57  │   14.6     │ CI resource limit
+Snapdragon 8 Gen 3    │   8T  │  105.31  │   13.2     │ big.LITTLE penalty
+
+══════════════════════════════════════════════════════════════════════════════
+
+Key Insight: Apple M1 has the HIGHEST per-core throughput (31.6/s)
+             Ryzen 9950X3D wins total throughput purely via core count (32T)
+```
+
 #### Platform Performance Analysis
 
 ```
 Throughput Comparison (GitHub Runners)
-══════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════════
 
   DLX Algorithm:
   macOS (M1)   │████████████████████████████████████████████████████│ 94.92/s ⭐
@@ -255,7 +276,7 @@ BT = Backtracking, DLX = Dancing Links
 
 ```
                      Backtracking vs DLX by Compiler
-    ═══════════════════════════════════════════════════════════
+    ═════════════════════════════════════════════════════════════════════════
 
     MSVC (Windows)
     ├─ Backtracking │██████████████████████████████████████████│ 805/s
@@ -267,7 +288,7 @@ BT = Backtracking, DLX = Dancing Links
     └─ DLX          │██████████████████████████████████████████████████│ 904/s
                     Δ = +61% (DLX dominates)
 
-    ═══════════════════════════════════════════════════════════
+    ═════════════════════════════════════════════════════════════════════════
 ```
 
 **Key Findings:**
@@ -366,7 +387,7 @@ Puzzle Complexity Comparison
 ────────┼───────┼───────┼──────────────┼──────────────────┤
   9x9   │   81  │  ~51  │    ~10²⁰     │    5000-10000    │
  16x16  │  256  │ ~220  │    ~10⁸⁰     │    1000-5000     │
- 25x25  │  625  │ ~500  │   ~10^200+   │     50-200       │
+ 25x25  │  625  │ ~500  │   ~10²⁰⁰⁺    │     50-200       │
 
 ════════════════════════════════════════════════════════════════
 ```
