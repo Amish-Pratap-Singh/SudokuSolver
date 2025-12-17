@@ -4,6 +4,17 @@ A high-performance, cross-platform Sudoku solver featuring multiple algorithms, 
 
 ![Preview](preview.png)
 
+## 🧠 Project Background
+
+I originally built a Sudoku solver as a small father-son coding challenge.
+It later evolved into a useful benchmark tool to explore algorithmic efficiency and cross-platform CPU performance.
+
+I wrote two articles documenting this journey:
+- **[Sudoku Solver — From a Father-Son Coding Challenge to a CPU Benchmark Tool](https://allenkuo.medium.com/sudoku-solver-from-a-father-son-coding-challenge-to-a-cpu-benchmark-tool-38300c968bf5)**
+- **[Sudoku Solver — Cross-Platform Performance Deep Dive (Part II)](https://allenkuo.medium.com/sudoku-solver-cross-platform-performance-deep-dive-part-ii-7dd1fc60e8b1)**
+
+---
+
 ## ✨ Features
 
 - **Multiple Algorithms**
@@ -592,4 +603,3 @@ MIT License
 
 - [Sudoku Solver — From a Father-Son Coding Challenge to a CPU Benchmark Tool](https://allenkuo.medium.com/sudoku-solver-from-a-father-son-coding-challenge-to-a-cpu-benchmark-tool-38300c968bf5)
 - [Sudoku Solver — Cross-Platform Performance Deep Dive (Part II)](https://allenkuo.medium.com/sudoku-solver-cross-platform-performance-deep-dive-part-ii-7dd1fc60e8b1)
-
